@@ -65,7 +65,7 @@ public class LinkedList<T> {
      * @param el element to be inserted
      * @throws IndexOutOfBoundsException
      */
-    public void add(int index, T el) throws IndexOutOfBoundsException {
+    public void add(int index, T el) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException(index);
         }
@@ -92,20 +92,22 @@ public class LinkedList<T> {
 
     /**
      * @return the first element of the list
+     * @throws NoSuchElementException
      */
     public T getFirst() {
         if (first == null) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("The list is empty");
         }
         return first.item;
     }
 
     /**
      * @return the last element of the list
+     * @throws NoSuchElementException
      */
     public T getLast() {
         if (last == null) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("The list is empty");
         }
         return last.item;
     }
@@ -115,7 +117,7 @@ public class LinkedList<T> {
      * @return element at the given index
      * @throws IndexOutOfBoundsException
      */
-    public T get(int index) throws IndexOutOfBoundsException {
+    public T get(int index) {
         if (index < 0 | index >= size) {
             throw new IndexOutOfBoundsException(index);
         }
@@ -126,8 +128,33 @@ public class LinkedList<T> {
         return curr.item;
     }
 
+    /**
+     * Removes and returns the first element of the list
+     * @return the first element of the list
+     * @throws NoSuchElementException
+     */
     public T removeFirst() {
+        if (size == 0) {
+            throw new NoSuchElementException("The list is empty");
+        }
 
+        T value = first.item;
+        Node<T> oldFirst = first;
+
+        first = oldFirst.next;
+
+        // helping GC
+        oldFirst.next = null;
+        oldFirst.item = null;
+
+        if (first == null) {
+            last = null;
+        } else {
+            first.prev = null;
+        }
+        size--;
+
+        return value;
     }
 
     public T removeLast() {
