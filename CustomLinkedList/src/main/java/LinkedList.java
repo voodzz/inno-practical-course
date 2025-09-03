@@ -58,18 +58,37 @@ public class LinkedList<T> {
     }
 
     public void add(int index, T el) {
+
     }
 
+    /**
+     * @return the first element of the list
+     */
     public T getFirst() {
-        return null;
+        return first.item;
     }
 
+    /**
+     * @return the last element of the list
+     */
     public T getLast() {
-        return null;
+        return last.item;
     }
 
-    public T get(int index) {
-        return null;
+    /**
+     * @param index index of the element to return
+     * @return element at the given index
+     * @throws IndexOutOfBoundsException
+     */
+    public T get(int index) throws IndexOutOfBoundsException {
+        if (index < 0 | index >= size) {
+            throw new IndexOutOfBoundsException(index);
+        }
+        Node<T> curr = first;
+        for (int i = 0; i < index; ++i) {
+            curr = curr.next;
+        }
+        return curr.item;
     }
 
     public T removeFirst() {
