@@ -1,3 +1,5 @@
+import java.util.NoSuchElementException;
+
 public class LinkedList<T> {
 
     /**
@@ -92,6 +94,9 @@ public class LinkedList<T> {
      * @return the first element of the list
      */
     public T getFirst() {
+        if (first == null) {
+            throw new NoSuchElementException();
+        }
         return first.item;
     }
 
@@ -99,6 +104,9 @@ public class LinkedList<T> {
      * @return the last element of the list
      */
     public T getLast() {
+        if (last == null) {
+            throw new NoSuchElementException();
+        }
         return last.item;
     }
 
@@ -119,7 +127,7 @@ public class LinkedList<T> {
     }
 
     public T removeFirst() {
-        return null;
+
     }
 
     public T removeLast() {
