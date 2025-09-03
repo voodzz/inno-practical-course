@@ -173,6 +173,7 @@ public class LinkedList<T> {
 
         // helping GC
         oldLast.prev = null;
+        oldLast.next = null;
         oldLast.item = null;
 
         if (last == null) {
@@ -186,7 +187,34 @@ public class LinkedList<T> {
     }
 
     public T remove(int index) {
-        return null;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException(index);
+        }
+
+        if (index == 0) {
+            return removeFirst();
+        }
+        if (index == size - 1) {
+            return removeLast();
+        }
+
+        size--;
+        Node<T> curr = first;
+        for (int i = 0; i < index - 1; ++i) {
+            curr = curr.next;
+        }
+        Node<T> removed = curr.next;
+        T value = removed.item;
+
+        // helping GC
+        removed.item = null;
+        removed.prev = null;
+        removed.next = null;
+
+        Node<T> next = curr.next.next;
+        curr.next = next;
+        next.prev = curr;
+        return value;
     }
 
     private static class Node<T> {
