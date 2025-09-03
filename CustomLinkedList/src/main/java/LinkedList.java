@@ -57,8 +57,35 @@ public class LinkedList<T> {
         }
     }
 
-    public void add(int index, T el) {
+    /**
+     * Inserts the element at the given index
+     * @param index index at which the element is to be inserted
+     * @param el element to be inserted
+     * @throws IndexOutOfBoundsException
+     */
+    public void add(int index, T el) throws IndexOutOfBoundsException {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException(index);
+        }
 
+        if (index == size) {
+            addLast(el);
+            return;
+        }
+        if (index == 0) {
+            addFirst(el);
+            return;
+        }
+
+        size++;
+        Node<T> curr = first;
+        for (int i = 0; i < index; i++) {
+            curr = curr.next;
+        }
+
+        Node<T> newNode = new Node<>(el, curr, curr.prev);
+        curr.prev.next = newNode;
+        curr.prev = newNode;
     }
 
     /**
