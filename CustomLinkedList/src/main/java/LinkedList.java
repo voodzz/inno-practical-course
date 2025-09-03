@@ -157,8 +157,32 @@ public class LinkedList<T> {
         return value;
     }
 
+    /**
+     * Removes and returns the last element of the list
+     * @return the last element of the list
+     * @throws NoSuchElementException
+     */
     public T removeLast() {
-        return null;
+        if (size == 0) {
+            throw new NoSuchElementException("The list is empty");
+        }
+        T value = last.item;
+        Node<T> oldLast = last;
+
+        last = oldLast.prev;
+
+        // helping GC
+        oldLast.prev = null;
+        oldLast.item = null;
+
+        if (last == null) {
+            first = null;
+        } else {
+            last.next = null;
+        }
+        size--;
+
+        return value;
     }
 
     public T remove(int index) {
