@@ -33,16 +33,28 @@ public class LinkedList<T> {
      */
     public void addFirst(T el) {
         size++;
-        Node<T> tmp = first;
-        first = new Node<>(el, tmp, null);
-        if (tmp == null) {
+        Node<T> oldFirst = first;
+        first = new Node<>(el, oldFirst, null);
+        if (oldFirst == null) {
             last = first;
         } else {
-            tmp.prev = first;
+            oldFirst.prev = first;
         }
     }
 
+    /**
+     * Inserts the element at the end of the list
+     * @param el the element to insert
+     */
     public void addLast(T el) {
+        size++;
+        Node<T> oldLast = last;
+        last = new Node<>(el, null, oldLast);
+        if (oldLast == null) {
+            first = last;
+        } else {
+            oldLast.next = last;
+        }
     }
 
     public void add(int index, T el) {
