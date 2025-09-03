@@ -1,5 +1,10 @@
 import java.util.NoSuchElementException;
 
+/**
+ * A custom implementation of a doubly-linked list
+ * that supports basic operations
+ * @param <T> the type of elements in a list
+ */
 public class LinkedList<T> {
 
     /**
@@ -186,6 +191,12 @@ public class LinkedList<T> {
         return value;
     }
 
+    /**
+     * Removes and returns the element at the given index
+     * @param index index of the element to be removed
+     * @return element at the given index
+     * @throws IndexOutOfBoundsException
+     */
     public T remove(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(index);
@@ -206,17 +217,22 @@ public class LinkedList<T> {
         Node<T> removed = curr.next;
         T value = removed.item;
 
+        Node<T> next = curr.next.next;
+        curr.next = next;
+        next.prev = curr;
+
         // helping GC
         removed.item = null;
         removed.prev = null;
         removed.next = null;
 
-        Node<T> next = curr.next.next;
-        curr.next = next;
-        next.prev = curr;
         return value;
     }
 
+    /**
+     * A node of the list
+     * @param <T> the type of element in a node
+     */
     private static class Node<T> {
         T item;
         Node<T> next;
