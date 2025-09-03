@@ -16,13 +16,30 @@ public class LinkedList<T> {
     private Node<T> last;
 
     /**
+     * Constructs an empty list
+     */
+    public LinkedList() {}
+
+    /**
      * @return the number of elements in the list
      */
     public int size() {
         return size;
     }
 
+    /**
+     * Inserts the element at the start of the list
+     * @param el the element to insert
+     */
     public void addFirst(T el) {
+        size++;
+        Node<T> tmp = first;
+        first = new Node<>(el, tmp, null);
+        if (tmp == null) {
+            last = first;
+        } else {
+            tmp.prev = first;
+        }
     }
 
     public void addLast(T el) {
