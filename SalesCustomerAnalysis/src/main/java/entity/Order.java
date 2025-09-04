@@ -1,8 +1,11 @@
 package entity;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
 public class Order {
     private String orderId;
     private LocalDateTime orderDate;

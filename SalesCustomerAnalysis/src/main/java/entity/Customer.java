@@ -1,7 +1,10 @@
 package entity;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class Customer {
     private String customerId;
     private String name;
