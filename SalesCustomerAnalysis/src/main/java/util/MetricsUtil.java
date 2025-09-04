@@ -7,6 +7,8 @@ import entity.OrderStatus;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Utility class to count the following metrics:
@@ -45,5 +47,21 @@ public class MetricsUtil {
                 .flatMap(order -> order.getItems().stream())
                 .mapToDouble(order -> order.getPrice() * order.getQuantity())
                 .sum();
+    }
+
+    /**
+     * Finds the most popular product by sales in the given list of orders
+     * @param orders the list of orders
+     * @return the most popular product by sales
+     */
+    public String getMostPopularProductBySales(List<Order> orders) {
+        return orders.stream()
+                .flatMap(order -> order.getItems().stream())
+                .collect(Collectors.groupingBy(OrderItem::getProductName, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElseThrow();
     }
 }
