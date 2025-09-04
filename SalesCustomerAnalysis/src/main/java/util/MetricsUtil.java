@@ -61,7 +61,7 @@ public class MetricsUtil {
     public String getMostPopularProductBySales(List<Order> orders) {
         return orders.stream()
                 .flatMap(order -> order.getItems().stream())
-                .collect(Collectors.groupingBy(OrderItem::getProductName, Collectors.counting()))
+                .collect(Collectors.groupingBy(OrderItem::getProductName, Collectors.summingInt(OrderItem::getQuantity)))
                 .entrySet()
                 .stream()
                 .max(Map.Entry.comparingByValue())
