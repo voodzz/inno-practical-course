@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 /**
  * Utility class to count the following metrics:
@@ -26,10 +25,10 @@ import java.util.stream.DoubleStream;
 public class MetricsUtil {
 
     /**
-     * Returns the list of unique cities where orders came from
+     * Returns a list of unique cities where orders came from
      *
      * @param orders the list of orders
-     * @return the list of unique cities where orders came from
+     * @return a list of unique cities where orders came from
      */
     public List<String> getListOfUniqueCities(List<Order> orders) {
         return orders.stream()
@@ -88,4 +87,18 @@ public class MetricsUtil {
                 .orElse(0);
     }
 
+    /**
+     * Returns a list of customers with more than 5 orders
+     * @param orders the list of orders
+     * @return a list of customers with more than 5 orders
+     */
+    public List<Customer> getCustomersWithMoreThanFiveOrders(List<Order> orders) {
+        return orders.stream()
+                .collect(Collectors.groupingBy(Order::getCustomer, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() > 5)
+                .map(Map.Entry::getKey)
+                .toList();
+    }
 }
