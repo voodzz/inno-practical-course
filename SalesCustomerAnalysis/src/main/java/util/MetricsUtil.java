@@ -8,7 +8,9 @@ import lombok.experimental.UtilityClass;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 /**
  * Utility class to count the following metrics:
@@ -25,6 +27,7 @@ public class MetricsUtil {
 
     /**
      * Returns the list of unique cities where orders came from
+     *
      * @param orders the list of orders
      * @return the list of unique cities where orders came from
      */
@@ -38,6 +41,7 @@ public class MetricsUtil {
 
     /**
      * Counts total income for all completed orders
+     *
      * @param orders the list of orders
      * @return total income for all completed orders
      */
@@ -51,6 +55,7 @@ public class MetricsUtil {
 
     /**
      * Finds the most popular product by sales in the given list of orders
+     *
      * @param orders the list of orders
      * @return the most popular product by sales
      */
@@ -64,4 +69,23 @@ public class MetricsUtil {
                 .map(Map.Entry::getKey)
                 .orElseThrow();
     }
+
+    /**
+     * Counts the average check for successfully delivered orders
+     * @param orders the list of orders
+     * @return the average check for successfully delivered orders
+     */
+    public double countAverageCheckForDeliveredOrders(List<Order> orders) {
+        ToDoubleFunction<List<OrderItem>> mapToChecks;
+        mapToChecks = list -> list.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+
+        return orders.stream()
+                .filter(order -> order.getStatus() == OrderStatus.DELIVERED)
+                .map(Order::getItems)
+                .mapToDouble(mapToChecks)
+                .average()
+                .orElse(0);
+    }
+
 }
