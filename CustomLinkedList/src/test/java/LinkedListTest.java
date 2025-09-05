@@ -127,13 +127,13 @@ public class LinkedListTest {
         assertEquals(3, list.get(1));
 
         // element somewhere in the middle of the list
-        assertEquals(5, list.remove(3));
+        assertEquals(6, list.remove(4));
+        assertEquals(5, list.get(3));
         assertEquals(4, list.get(2));
-        assertEquals(6, list.get(3));
 
         // pre-last element
         assertEquals(7, list.remove(4));
-        assertEquals(6, list.get(3));
+        assertEquals(5, list.get(3));
         assertEquals(8, list.get(4));
 
     }

@@ -193,7 +193,6 @@ public class LinkedList<T> {
 
         last = oldLast.prev;
 
-        // helping GC
         oldLast.prev = null;
         oldLast.next = null;
         oldLast.item = null;
@@ -229,9 +228,17 @@ public class LinkedList<T> {
 
         size--;
         Node<T> curr = first;
-        for (int i = 0; i < index - 1; ++i) {
-            curr = curr.next;
+        if (index <= size / 2) {
+            for (int i = 0; i < index - 1; ++i) {
+                curr = curr.next;
+            }
+        } else {
+            curr = last;
+            for (int i = 0; i <= size - index; ++i) {
+                curr = curr.prev;
+            }
         }
+
         Node<T> removed = curr.next;
         T value = removed.item;
 
