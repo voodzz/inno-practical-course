@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 /**
  * A custom implementation of a doubly-linked list
  * that supports basic operations
+ *
  * @param <T> the type of elements in a list
  */
 public class LinkedList<T> {
@@ -27,7 +28,8 @@ public class LinkedList<T> {
     /**
      * Constructs an empty list
      */
-    public LinkedList() {}
+    public LinkedList() {
+    }
 
     /**
      * @return the number of elements in the list
@@ -38,6 +40,7 @@ public class LinkedList<T> {
 
     /**
      * Inserts the element at the start of the list
+     *
      * @param el the element to insert
      */
     public void addFirst(T el) {
@@ -53,6 +56,7 @@ public class LinkedList<T> {
 
     /**
      * Inserts the element at the end of the list
+     *
      * @param el the element to insert
      */
     public void addLast(T el) {
@@ -68,8 +72,9 @@ public class LinkedList<T> {
 
     /**
      * Inserts the element at the given index
+     *
      * @param index index at which the element is to be inserted
-     * @param el element to be inserted
+     * @param el    element to be inserted
      * @throws IndexOutOfBoundsException
      */
     public void add(int index, T el) {
@@ -125,18 +130,28 @@ public class LinkedList<T> {
      * @throws IndexOutOfBoundsException
      */
     public T get(int index) {
-        if (index < 0 | index >= size) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(index);
         }
+
         Node<T> curr = first;
-        for (int i = 0; i < index; ++i) {
-            curr = curr.next;
+        if (index <= size / 2) {
+            for (int i = 0; i < index; ++i) {
+                curr = curr.next;
+            }
+        } else {
+            curr = last;
+            for (int i = 0; i < size - index - 1; ++i) {
+                curr = curr.prev;
+            }
         }
+
         return curr.item;
     }
 
     /**
      * Removes and returns the first element of the list
+     *
      * @return the first element of the list
      * @throws NoSuchElementException
      */
@@ -165,6 +180,7 @@ public class LinkedList<T> {
 
     /**
      * Removes and returns the last element of the list
+     *
      * @return the last element of the list
      * @throws NoSuchElementException
      */
@@ -194,6 +210,7 @@ public class LinkedList<T> {
 
     /**
      * Removes and returns the element at the given index
+     *
      * @param index index of the element to be removed
      * @return element at the given index
      * @throws IndexOutOfBoundsException
@@ -221,7 +238,7 @@ public class LinkedList<T> {
         Node<T> next = curr.next.next;
         curr.next = next;
         next.prev = curr;
-        
+
         removed.item = null;
         removed.prev = null;
         removed.next = null;
@@ -231,6 +248,7 @@ public class LinkedList<T> {
 
     /**
      * A node of the list
+     *
      * @param <T> the type of element in a node
      */
     private static class Node<T> {
