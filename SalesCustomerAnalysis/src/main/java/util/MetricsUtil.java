@@ -75,14 +75,11 @@ public class MetricsUtil {
      * @return the average check for successfully delivered orders
      */
     public double countAverageCheckForDeliveredOrders(List<Order> orders) {
-        ToDoubleFunction<List<OrderItem>> mapToChecks;
-        mapToChecks = list -> list.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
-
         return orders.stream()
                 .filter(order -> order.getStatus() == OrderStatus.DELIVERED)
-                .map(Order::getItems)
-                .mapToDouble(mapToChecks)
+                .mapToDouble(order -> order.getItems().stream()
+                        .mapToDouble(item -> item.getQuantity() * item.getPrice())
+                        .sum())
                 .average()
                 .orElse(0);
     }
