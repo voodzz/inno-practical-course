@@ -148,7 +148,6 @@ public class LinkedList<T> {
 
         first = oldFirst.next;
 
-        // helping GC
         oldFirst.next = null;
         oldFirst.item = null;
 
@@ -220,8 +219,7 @@ public class LinkedList<T> {
         Node<T> next = curr.next.next;
         curr.next = next;
         next.prev = curr;
-
-        // helping GC
+        
         removed.item = null;
         removed.prev = null;
         removed.next = null;
