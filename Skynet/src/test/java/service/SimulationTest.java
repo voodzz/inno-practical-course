@@ -4,6 +4,8 @@ import model.Faction;
 import model.Factory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,17 +13,18 @@ import java.util.concurrent.Phaser;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SimulationTest {
+  private static final Logger log = LoggerFactory.getLogger(SimulationTest.class);
+
   @Test
   void testSimulation() {
     Phaser phaser = new Phaser(1);
 
     Factory factory = new Factory(phaser);
-    Faction world = new Faction("World", factory, phaser);
-    Faction wednesday = new Faction("Wednesday", factory, phaser);
+    Faction world = new Faction(factory, phaser);
+    Faction wednesday = new Faction(factory, phaser);
 
     try (ExecutorService executorService = Executors.newFixedThreadPool(3)) {
       for (int i = 0; i < 100; ++i) {
-        System.out.println("day " + (i + 1));
         executorService.submit(factory);
         phaser.arriveAndAwaitAdvance();
 
@@ -34,11 +37,11 @@ public class SimulationTest {
       int wednesdayRobots = wednesday.getRobotCount();
 
       if (worldRobots > wednesdayRobots) {
-        System.out.println("World wins");
+        log.info("World has won. {} vs {}", worldRobots, wednesdayRobots);
       } else if (worldRobots < wednesdayRobots) {
-        System.out.println("Wednesday wins");
+        log.info("Wednesday has won. {} vs {}", wednesdayRobots, worldRobots);
       } else {
-        System.out.println("Tie");
+        log.info("Tie. {} vs {}", worldRobots, wednesdayRobots);
       }
     }
   }

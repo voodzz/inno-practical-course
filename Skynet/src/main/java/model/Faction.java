@@ -1,5 +1,8 @@
 package model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.Map;
@@ -8,21 +11,21 @@ import java.util.concurrent.Phaser;
 
 public class Faction implements Runnable {
 
-  private final String name;
+  private static final Logger log = LoggerFactory.getLogger(Faction.class);
+
   private final Factory factory;
   private final Phaser phaser;
   private final Map<RobotPart, Integer> partMap = new EnumMap<>(RobotPart.class);
   private int robotCount = 0;
 
-  public Faction(String name, Factory factory, Phaser phaser) {
-    this.name = name;
+  public Faction(Factory factory, Phaser phaser) {
     this.factory = factory;
     this.phaser = phaser;
   }
 
   @Override
   public void run() {
-      phaser.register();
+    phaser.register();
     for (int i = 0; i < 5; ++i) {
       RobotPart part = factory.getStorage().poll();
       if (part != null) {
@@ -43,7 +46,7 @@ public class Faction implements Runnable {
         });
   }
 
-    public int getRobotCount() {
-        return robotCount;
-    }
+  public int getRobotCount() {
+    return robotCount;
+  }
 }
