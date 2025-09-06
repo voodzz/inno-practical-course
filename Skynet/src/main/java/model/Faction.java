@@ -1,6 +1,9 @@
 package model;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.Phaser;
 
 public class Faction implements Runnable {
@@ -15,20 +18,22 @@ public class Faction implements Runnable {
     this.name = name;
     this.factory = factory;
     this.phaser = phaser;
+    phaser.register();
   }
 
   @Override
   public void run() {
+    phaser.arriveAndAwaitAdvance();
+
     for (int i = 0; i < 5; ++i) {
       RobotPart part = factory.getStorage().poll();
       if (part != null) {
         partMap.put(part, partMap.getOrDefault(part, 0) + 1);
       }
     }
-
-    phaser.arriveAndAwaitAdvance();
-
     buildRobots();
+
+    phaser.arriveAndDeregister();
   }
 
   private void buildRobots() {

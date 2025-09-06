@@ -11,25 +11,28 @@ public class Factory implements Runnable {
   private final Random random = new Random();
   private final Phaser phaser;
 
-    public Factory(Phaser phaser) {
-        this.phaser = phaser;
-    }
+  public Factory(Phaser phaser) {
+    this.phaser = phaser;
+    phaser.register();
+  }
 
-    @Override
+  @Override
   public void run() {
+    phaser.arriveAndAwaitAdvance();
+
     int amount = random.nextInt(11);
     try {
       for (int i = 0; i < amount; ++i) {
         storage.put(RobotPart.getPart());
       }
-
-      phaser.arriveAndAwaitAdvance();
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
+    } finally {
+      phaser.arriveAndDeregister();
     }
   }
 
   public BlockingQueue<RobotPart> getStorage() {
-      return storage;
+    return storage;
   }
 }
