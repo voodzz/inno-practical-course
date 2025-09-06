@@ -18,13 +18,11 @@ public class Faction implements Runnable {
     this.name = name;
     this.factory = factory;
     this.phaser = phaser;
-    phaser.register();
   }
 
   @Override
   public void run() {
-    phaser.arriveAndAwaitAdvance();
-
+      phaser.register();
     for (int i = 0; i < 5; ++i) {
       RobotPart part = factory.getStorage().poll();
       if (part != null) {
@@ -44,4 +42,8 @@ public class Faction implements Runnable {
           partMap.forEach((k, v) -> partMap.merge(k, -1 * integer, Integer::sum));
         });
   }
+
+    public int getRobotCount() {
+        return robotCount;
+    }
 }

@@ -13,13 +13,11 @@ public class Factory implements Runnable {
 
   public Factory(Phaser phaser) {
     this.phaser = phaser;
-    phaser.register();
   }
 
   @Override
   public void run() {
-    phaser.arriveAndAwaitAdvance();
-
+      phaser.register();
     int amount = random.nextInt(11);
     try {
       for (int i = 0; i < amount; ++i) {
