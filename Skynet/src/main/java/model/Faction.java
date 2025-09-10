@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Phaser;
 
 public class Faction implements Runnable {
@@ -15,7 +15,7 @@ public class Faction implements Runnable {
 
   private final Factory factory;
   private final Phaser phaser;
-  private final Map<RobotPart, Integer> partMap = new EnumMap<>(RobotPart.class);
+  private final Map<RobotPart, Integer> partMap = new ConcurrentHashMap<>(RobotPart.class.getEnumConstants().length);
   private int robotCount = 0;
 
   public Faction(Factory factory, Phaser phaser) {
