@@ -213,30 +213,20 @@ public class LinkedList<T> {
             return removeLast();
         }
 
-        size--;
-        Node<T> curr = first;
-        if (index <= size / 2) {
-            for (int i = 0; i < index - 1; ++i) {
-                curr = curr.next;
-            }
-        } else {
-            curr = last;
-            for (int i = 0; i <= size - index; ++i) {
-                curr = curr.prev;
-            }
-        }
-
-        Node<T> removed = curr.next;
+        Node<T> removed = traverse(index);
         T value = removed.item;
 
-        Node<T> next = curr.next.next;
-        curr.next = next;
-        next.prev = curr;
+        Node<T> next = removed.next;
+        Node<T> prev = removed.prev;
+
+        next.prev = prev;
+        prev.next = next;
 
         removed.item = null;
         removed.prev = null;
         removed.next = null;
 
+        size--;
         return value;
     }
 
