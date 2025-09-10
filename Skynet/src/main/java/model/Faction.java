@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Phaser;
+import java.util.stream.IntStream;
 
 public class Faction implements Runnable {
 
@@ -15,7 +16,8 @@ public class Faction implements Runnable {
 
   private final Factory factory;
   private final Phaser phaser;
-  private final Map<RobotPart, Integer> partMap = new ConcurrentHashMap<>(RobotPart.class.getEnumConstants().length);
+  private final Map<RobotPart, Integer> partMap =
+      new ConcurrentHashMap<>(RobotPart.class.getEnumConstants().length);
   private int robotCount = 0;
 
   public Faction(Factory factory, Phaser phaser) {
@@ -32,7 +34,9 @@ public class Faction implements Runnable {
         partMap.put(part, partMap.getOrDefault(part, 0) + 1);
       }
     }
-    buildRobots();
+    if (canBuildRobots()) {
+      buildRobots();
+    }
 
     phaser.arriveAndDeregister();
   }
@@ -44,6 +48,15 @@ public class Faction implements Runnable {
           robotCount += integer;
           partMap.forEach((k, v) -> partMap.merge(k, -1 * integer, Integer::sum));
         });
+  }
+
+  private boolean canBuildRobots() {
+    return IntStream.of(
+            partMap.getOrDefault(RobotPart.HEAD, 0),
+            partMap.getOrDefault(RobotPart.FEET, 0),
+            partMap.getOrDefault(RobotPart.TORSO, 0),
+            partMap.getOrDefault(RobotPart.HANDS, 0))
+        .allMatch(count -> count > 0);
   }
 
   public int getRobotCount() {
