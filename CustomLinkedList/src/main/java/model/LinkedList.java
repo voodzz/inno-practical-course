@@ -1,4 +1,4 @@
-package list;
+package model;
 
 import java.util.NoSuchElementException;
 
