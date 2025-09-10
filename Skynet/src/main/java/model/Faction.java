@@ -3,7 +3,9 @@ package model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,11 +30,11 @@ public class Faction implements Runnable {
   @Override
   public void run() {
     phaser.register();
-    for (int i = 0; i < 5; ++i) {
-      RobotPart part = factory.getStorage().poll();
-      if (part != null) {
-        partMap.put(part, partMap.getOrDefault(part, 0) + 1);
-      }
+    List<RobotPart> parts = new ArrayList<>();
+    factory.getStorage().drainTo(parts, 5);
+
+    for (RobotPart part : parts) {
+      partMap.merge(part, 1, Integer::sum);
     }
     if (canBuildRobots()) {
       buildRobots();
