@@ -92,10 +92,7 @@ public class LinkedList<T> {
         }
 
         size++;
-        Node<T> curr = first;
-        for (int i = 0; i < index; i++) {
-            curr = curr.next;
-        }
+        Node<T> curr = traverse(index);
 
         Node<T> newNode = new Node<>(el, curr, curr.prev);
         curr.prev.next = newNode;
@@ -134,17 +131,7 @@ public class LinkedList<T> {
             throw new IndexOutOfBoundsException(index);
         }
 
-        Node<T> curr = first;
-        if (index <= size / 2) {
-            for (int i = 0; i < index; ++i) {
-                curr = curr.next;
-            }
-        } else {
-            curr = last;
-            for (int i = 0; i < size - index - 1; ++i) {
-                curr = curr.prev;
-            }
-        }
+        Node<T> curr = traverse(index);
 
         return curr.item;
     }
@@ -251,6 +238,27 @@ public class LinkedList<T> {
         removed.next = null;
 
         return value;
+    }
+
+    /**
+     *  Traverses to {@link Node} with the given index
+     *
+     * @param index index of the element to traverse to
+     * @return Node at the given index
+     */
+    private Node<T> traverse(int index) {
+        Node<T> curr = first;
+        if (index <= size / 2) {
+            for (int i = 0; i < index; ++i) {
+                curr = curr.next;
+            }
+        } else {
+            curr = last;
+            for (int i = 0; i < size - index - 1; ++i) {
+                curr = curr.prev;
+            }
+        }
+        return curr;
     }
 
     /**
